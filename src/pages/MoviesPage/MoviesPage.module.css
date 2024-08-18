@@ -1,0 +1,30 @@
+/* MoviesPage.module.css */
+.container {
+    padding: 20px;
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchInput {
+    margin-bottom: 10px;
+    padding: 8px;
+    font-size: 16px;
+}
+
+.searchButton {
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+.noResults {
+    font-style: italic;
+}

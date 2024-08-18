@@ -1,0 +1,15 @@
+.nav {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 20px;
+}
+
+.navA {
+    color: #000;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+nav a.active {
+    color: #e50914;
+}

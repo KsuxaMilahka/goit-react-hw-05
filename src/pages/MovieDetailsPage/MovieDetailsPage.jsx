@@ -1,11 +1,5 @@
-import { useEffect, useState } from 'react';
-import {
-  useParams,
-  Link,
-  Outlet,
-  // useNavigate,
-  useLocation,
-} from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
 import { getMovieDetails } from '../../services/api';
 import Loader from '../../components/Loader/Loader';
 import styles from './MovieDetailsPage.module.css';
@@ -14,8 +8,9 @@ const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  // const navigate = useNavigate();
   const location = useLocation();
+
+  const initialLocationRef = useRef(location.state);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -37,7 +32,7 @@ const MovieDetailsPage = () => {
     return <Loader />;
   }
 
-  const backLink = location.state?.from ?? '/movies';
+  const backLink = initialLocationRef.current?.from ?? '/movies';
 
   return (
     <div className={styles.container}>

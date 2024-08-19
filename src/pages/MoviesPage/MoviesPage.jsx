@@ -1,32 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../../services/api';
 import MovieList from '../../components/MovieList/MovieList';
 import Loader from '../../components/Loader/Loader';
 import styles from './MoviesPage.module.css';
 
 const MoviesPage = () => {
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [noResults, setNoResults] = useState(false);
 
-  const handleSearch = async e => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    setNoResults(false);
+  const query = searchParams.get('query') || '';
 
-    try {
-      const searchResults = await searchMovies(query);
-      if (searchResults.length === 0) {
-        setNoResults(true);
+  useEffect(() => {
+    if (!query) return;
+
+    const fetchMovies = async () => {
+      setIsLoading(true);
+      setError(null);
+      setNoResults(false);
+
+      try {
+        const searchResults = await searchMovies(query);
+        if (searchResults.length === 0) {
+          setNoResults(true);
+        }
+        setMovies(searchResults);
+      } catch (error) {
+        setError(
+          `An error occurred while searching for movies: ${error.message}`,
+        );
+      } finally {
+        setIsLoading(false);
       }
-      setMovies(searchResults);
-    } catch (error) {
-      setError('An error occurred while searching for movies.');
-    } finally {
-      setIsLoading(false);
+    };
+
+    fetchMovies();
+  }, [query]);
+
+  const handleSearch = e => {
+    e.preventDefault();
+    if (query.trim()) {
+      setSearchParams({ query });
     }
   };
 
@@ -38,7 +55,7 @@ const MoviesPage = () => {
           className={styles.searchInput}
           type="text"
           value={query}
-          onChange={e => setQuery(e.target.value)}
+          onChange={e => setSearchParams({ query: e.target.value })}
           placeholder="Enter movie name"
         />
         <button className={styles.searchButton} type="submit">

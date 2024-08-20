@@ -11,7 +11,7 @@ const MoviesPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [noResults, setNoResults] = useState(false);
-
+  const [inputValue, setInputValue] = useState('');
   const query = searchParams.get('query') || '';
 
   useEffect(() => {
@@ -42,8 +42,8 @@ const MoviesPage = () => {
 
   const handleSearch = e => {
     e.preventDefault();
-    if (query.trim()) {
-      setSearchParams({ query });
+    if (inputValue.trim()) {
+      setSearchParams({ query: inputValue });
     }
   };
 
@@ -54,8 +54,8 @@ const MoviesPage = () => {
         <input
           className={styles.searchInput}
           type="text"
-          value={query}
-          onChange={e => setSearchParams({ query: e.target.value })}
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
           placeholder="Enter movie name"
         />
         <button className={styles.searchButton} type="submit">
